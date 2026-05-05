@@ -9,18 +9,18 @@ export const PLAYER_BASE_WIDTH = 80;
 export const PLAYER_BASE_HEIGHT = 65;
 
 // 物理
-export const GRAVITY = 0.8;          // 1フレームあたりの落下加速度(px)
-export const JUMP_VELOCITY = -15;    // ジャンプ初速(負=上方向)
+export const GRAVITY = 1;          // 1フレームあたりの落下加速度(px)
+export const JUMP_VELOCITY = -18;    // ジャンプ初速(負=上方向)
 
 // スピード
-export const INITIAL_SPEED = 5;      // 初期スクロール速度(px/frame)
-export const MAX_SPEED = 7.5;         // 最大スクロール速度(px/frame)
-export const SPEED_INCREASE_RATE = 0.005; // スピード上昇率(px/frame)
+export const INITIAL_SPEED = 6;      // 初期スクロール速度(px/frame)
+export const MAX_SPEED = 10;         // 最大スクロール速度(px/frame)
+export const SPEED_INCREASE_RATE = 0.0005; // スピード上昇率(px/frame)
 
 // サイズ
 export const SIZE_THRESHOLDS = {
   SMALL: 1.0,
-  MEDIUM: 1.5,
+  MEDIUM: 2,
   GIANT: 3.0,
 } as const;
 

@@ -1,13 +1,17 @@
 import {
   CANVAS_WIDTH,
   CLOUD_WIDTH,
+  GRAVITY,
   GROUND_Y,
   INITIAL_SPEED,
+  JUMP_VELOCITY,
+  MAX_SPEED,
   MEAT_HEIGHT,
   MEAT_WIDTH,
   PLAYER_BASE_HEIGHT,
   PLAYER_BASE_WIDTH,
   PLAYER_X,
+  SPEED_INCREASE_RATE,
 } from "./constants";
 import { useGameStore } from "./zustand";
 
@@ -30,6 +34,7 @@ export interface Player {
   x: number;
   y: number;          // 足元のY座標(地面に立っているとき = GROUND_Y)
   vy: number;         // 縦方向の速度
+  jumpsUsed: number;  // 使用済みジャンプ回数(0=地上, 最大2)
   scale: number;      // 1.0 が基準
   isCrouching: boolean;
   giantTimer: number; // 巨大化残り時間(ms)
@@ -58,6 +63,7 @@ export function createInitialState(): GameState {
       x: PLAYER_X,
       y: GROUND_Y,
       vy: 0,
+      jumpsUsed: 0,
       scale: 1.0,
       isCrouching: false,
       giantTimer: 0,
@@ -89,6 +95,8 @@ export function updateState(state: GameState, dt: number): void {
 
   // スクロール処理(距離 = 速度 × 時間 で計算)
   // 60FPSを基準に、dtに応じた距離を進める
+  state.speed = Math.min(MAX_SPEED, state.speed + SPEED_INCREASE_RATE * (dt / (1000 / 60)));
+
   const moveAmount = state.speed * (dt / (1000 / 60));
   state.distance += moveAmount;
   state.scrollOffset = (state.scrollOffset + moveAmount) % 100;
@@ -104,11 +112,16 @@ export function updateState(state: GameState, dt: number): void {
   // (1秒で2周期くらい、スピードが上がると速くなる)
   state.runFrame = (state.runFrame + dt * 0.004 * state.speed) % 1;
 
-  // TODO: ここに後で追加
-  // - ジャンプ処理(重力適用)
-  // - 障害物の更新
-  // - 衝突判定
-  // - 巨大化タイマー減衰
+  // 重力・着地処理
+  const { player } = state;
+  const scale = dt / (1000 / 60);
+  player.vy += GRAVITY * scale;
+  player.y += player.vy * scale;
+  if (player.y >= GROUND_Y) {
+    player.y = GROUND_Y;
+    player.vy = 0;
+    player.jumpsUsed = 0;
+  }
 
   // 肉の移動・衝突判定・スポーン・削除
   for (const meat of state.meats) {
@@ -118,7 +131,13 @@ export function updateState(state: GameState, dt: number): void {
   handleMeatCollision(state);
   state.meatSpawnTimer -= dt;
   if (state.meatSpawnTimer <= 0) {
-    state.meats.push({ x: CANVAS_WIDTH + 50, y: GROUND_Y - MEAT_HEIGHT });
+    const maxY = GROUND_Y - MEAT_HEIGHT;
+    const minY = 180;
+    const y = minY + Math.random() * (maxY - minY);
+    state.meats.push({
+      x: CANVAS_WIDTH + 50,
+      y: y,
+    });
     state.meatSpawnTimer = 4000 + Math.random() * 4000;
   }
 
@@ -134,6 +153,14 @@ export function updateState(state: GameState, dt: number): void {
       y: 30 + Math.random() * 150, // 上部 1 / 3 のどこか
     });
     state.cloudSpawnTimer = 3000 + Math.random() * 4000;
+  }
+}
+
+// ジャンプ(ダブルジャンプまで対応)
+export function jumpPlayer(state: GameState): void {
+  if (state.player.jumpsUsed < 2) {
+    state.player.vy = JUMP_VELOCITY;
+    state.player.jumpsUsed++;
   }
 }
 

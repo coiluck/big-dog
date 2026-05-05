@@ -1,25 +1,15 @@
-import { Routes, Route, Link } from "react-router-dom";
-import './css/default.css';
-
-function Home() {
-  return <h1>Home</h1>;
-}
-
-function About() {
-  return <h1>About</h1>;
-}
+import { Routes, Route } from "react-router-dom";
+import Top from "./ts/pages/Top";
+import Game from "./ts/pages/Game";
+import Record from "./ts/pages/Record";
+import "./css/default.css";
 
 export default function App() {
   return (
-    <>
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/about">About</Link>
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Top />} />
+      <Route path="/game" element={<Game />} />
+      <Route path="/record" element={<Record />} />
+    </Routes>
   );
 }

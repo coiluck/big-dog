@@ -25,3 +25,9 @@ export const SIZE_THRESHOLDS = {
 } as const;
 
 export const GIANT_DURATION_MS = 10000; // 巨大化の持続時間
+
+// オブジェクトサイズ
+export const MEAT_WIDTH = 60;
+export const MEAT_HEIGHT = 32;
+export const CLOUD_WIDTH = 106;
+export const CLOUD_HEIGHT = 63;

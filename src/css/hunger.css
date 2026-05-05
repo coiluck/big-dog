@@ -1,0 +1,8 @@
+.hunger-component-container {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #fff;
+  font-family: monospace;
+  font-size: 1.5rem;
+}

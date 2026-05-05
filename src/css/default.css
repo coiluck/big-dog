@@ -27,6 +27,7 @@ button {
 a {
   text-decoration: none;
 }
+canvas { width: 100vw; height: 100vh }
 html {
   overflow-y: auto;
   scrollbar-width: none;

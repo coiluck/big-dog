@@ -2,7 +2,11 @@ import { useEffect, useRef } from "react";
 import {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
+  CLOUD_HEIGHT,
+  CLOUD_WIDTH,
   GROUND_Y,
+  MEAT_HEIGHT,
+  MEAT_WIDTH,
   PLAYER_BASE_HEIGHT,
   PLAYER_BASE_WIDTH,
 } from "../lib/constants";
@@ -17,9 +21,11 @@ function loadImage(path: string): HTMLImageElement {
   return img;
 }
 
-const groundImage = loadImage("images/ground.png");
-const dogRun1 = loadImage("images/run1.png");
-const dogRun2 = loadImage("images/run2.png");
+const groundImage = loadImage("images/Game/ground.png");
+const dogRun1 = loadImage("images/Game/run1.png");
+const dogRun2 = loadImage("images/Game/run2.png");
+const meatImage = loadImage("images/Game/meat.png");
+const cloudImage = loadImage("images/Game/cloud.png");
 
 // 横方向のみ繰り返すパターン(初回描画時に作成)
 let groundPattern: CanvasPattern | null = null;
@@ -81,7 +87,9 @@ function render(ctx: CanvasRenderingContext2D, state: GameState): void {
     groundPattern = ctx.createPattern(groundImage, "repeat-x");
   }
 
+  drawClouds(ctx, state);
   drawGround(ctx, state);
+  drawMeats(ctx, state);
   drawPlayer(ctx, state);
 }
 
@@ -103,6 +111,20 @@ function drawGround(ctx: CanvasRenderingContext2D, state: GameState): void {
     groundImage.naturalHeight
   );
   ctx.restore();
+}
+
+function drawClouds(ctx: CanvasRenderingContext2D, state: GameState): void {
+  if (!cloudImage.complete || cloudImage.naturalWidth === 0) return;
+  for (const cloud of state.clouds) {
+    ctx.drawImage(cloudImage, cloud.x, cloud.y, CLOUD_WIDTH, CLOUD_HEIGHT);
+  }
+}
+
+function drawMeats(ctx: CanvasRenderingContext2D, state: GameState): void {
+  if (!meatImage.complete || meatImage.naturalWidth === 0) return;
+  for (const meat of state.meats) {
+    ctx.drawImage(meatImage, meat.x, meat.y, MEAT_WIDTH, MEAT_HEIGHT);
+  }
 }
 
 // プレイヤー(犬) - run1.png と run2.png を交互に切り替え

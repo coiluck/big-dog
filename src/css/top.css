@@ -1,0 +1,223 @@
+.top-bg.sky {
+  position: absolute;
+  inset: 0;
+  background-color: #87ceeb;
+}
+.top-bg.ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(1/9 * 100vh);
+  background-image: url('/images/Game/ground.png');
+  background-repeat: repeat-x;
+  background-position: left top;
+  background-size: auto 150%;
+}
+
+.top-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  z-index: 1;
+}
+
+/* ===== タイトル ===== */
+.top-title {
+  text-align: center;
+  margin: 0 0 2rem;
+  font-weight: bold;
+  user-select: none;
+  animation:
+  title-shake 0.4s ease-out 0.7s both,
+  title-breath 3.2s ease-in-out 1.6s infinite;
+}
+
+.top-title-main {
+  display: block;
+  color: #2b1d12;
+  text-shadow:
+    3px 3px 0 #fff,
+    6px 6px 0 rgba(0, 0, 0, 0.18);
+  letter-spacing: 0.1rem;
+  transform-origin: 50% 100%;
+  opacity: 0;
+  animation: title-drop 0.7s cubic-bezier(0.2, 1.4, 0.3, 1) 0.15s forwards;
+}
+
+.top-title-sub {
+  display: block;
+  margin-top: 0.4em;
+  font-size: clamp(1.4rem, 4.5vw, 2.6rem);
+  color: #d94a2b;
+  letter-spacing: 0.15em;
+}
+
+.top-title-sub > span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(-30px) rotate(-12deg);
+  animation: title-pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) forwards;
+  text-shadow: 2px 2px 0 #fff;
+}
+
+/* メインテキスト: 上からドスンと落下 → 軽くバウンド */
+@keyframes title-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-120%) scale(1.4);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.05, 0.85);
+  }
+  78% {
+    transform: translateY(-8%) scale(0.98, 1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+/* サブテキスト: 一文字ずつ弾んで降りる */
+@keyframes title-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) rotate(-12deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6px) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* 着地後のかすかな呼吸 */
+@keyframes title-breath {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes title-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(3px, -1px); }
+  60% { transform: translate(-2px, 2px); }
+  80% { transform: translate(1px, -1px); }
+}
+
+.top-start-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 300px;
+  height: 90px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  color: #FFFFFF;
+  font-family: 'Garamond', serif;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  text-shadow: 0px 0px 15px rgba(255, 223, 158, 0.7), 0px 2px 3px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, #a83232, #6a1a1a);
+  border: 2px solid #D4AF37;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.top-start-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(145deg, #c73e3e, #8b2424);
+  border: 2px solid #F4D03F;
+  box-shadow:
+    inset 0 0 15px rgba(255, 255, 255, 0.3),
+    0 8px 25px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(212, 175, 55, 0.4);
+  text-shadow:
+    0px 0px 20px rgba(255, 223, 158, 0.9),
+    0px 2px 4px rgba(0, 0, 0, 0.7),
+    0px 0px 8px rgba(244, 208, 63, 0.5);
+  color: #FFFEF7;
+}
+
+.top-record-button {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+.top-record-button-image {
+  width: 100px;
+  height: 100px;
+  background-image: url('/images/Top/record.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+.top-record-button-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1e1e2e;
+}
+
+.top-rule-button {
+  position: relative;
+  background: linear-gradient(145deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.9) 50%, rgba(210, 180, 140, 0.9) 100%);
+  border: 1px solid rgba(210, 180, 140, 0.8);
+  border-radius: 50px;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  color: #f0e6d2;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+.top-rule-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 6px 16px rgba(210, 180, 140, 0.4),
+    inset 0 1px 3px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.8);
+}
+.top-rule-button:active {
+  transform: translateY(0) scale(1.02);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.6),
+    inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+

@@ -1,8 +1,185 @@
 .hunger-component-container {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  color: #fff;
-  font-family: monospace;
-  font-size: 1.5rem;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  width: 15rem;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: calc(0.5rem * 2 + 3rem);
+}
+
+.hunger-component-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+}
+.hunger-component-icon.small {
+  background-image: url('/images/Game/dog/sm_run1.png');
+}
+.hunger-component-icon.medium {
+  background-image: url('/images/Game/dog/md_run1.png');
+}
+.hunger-component-icon.giant {
+  background-image: url('/images/Game/dog/gi_run1.png');
+}
+
+.hunger-component-bar {
+  flex: 1;
+  position: relative;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.hunger-component-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #6bcf7f 0%, #a9cf6b 100%);
+  border-radius: 5px;
+  transition: width 0.3s ease-out;
+}
+
+.hunger-component-bar.small::before, .hunger-component-bar.medium::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background-color: #fff;
+}
+
+/* ===== 無敵モード（.giant）====== */
+
+/* コンテナ：虹色の光る枠 + 背景の脈動 */
+.hunger-component-container.giant {
+  background-color: rgba(0, 0, 0, 0.55);
+  /* 多重ボックスシャドウで外側にレインボーグロー */
+  animation:
+    giant-rainbow-glow 2s linear infinite,
+    giant-container-pulse 0.8s ease-in-out infinite;
+}
+
+/* 虹色のボーダーリング（擬似要素・レイアウトに影響しない） */
+.hunger-component-container.giant::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    #ff0080, #ff8c00, #ffd700, #00ff7f,
+    #00bfff, #8a2be2, #ff1493, #ff0080,
+    #ff8c00, #ffd700, #00ff7f, #00bfff
+  );
+  background-size: 300% 100%;
+  /* リング状にくり抜く */
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  animation: giant-ring-flow 2s linear infinite;
+}
+
+@keyframes giant-ring-flow {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes giant-rainbow-glow {
+  0% {
+    box-shadow:
+      0 0 12px 2px rgba(255, 0, 128, 0.7),
+      0 0 24px 6px rgba(255, 140, 0, 0.4);
+  }
+  25% {
+    box-shadow:
+      0 0 12px 2px rgba(255, 215, 0, 0.7),
+      0 0 24px 6px rgba(0, 255, 127, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 12px 2px rgba(0, 191, 255, 0.7),
+      0 0 24px 6px rgba(138, 43, 226, 0.4);
+  }
+  75% {
+    box-shadow:
+      0 0 12px 2px rgba(255, 20, 147, 0.7),
+      0 0 24px 6px rgba(255, 0, 128, 0.4);
+  }
+  100% {
+    box-shadow:
+      0 0 12px 2px rgba(255, 0, 128, 0.7),
+      0 0 24px 6px rgba(255, 140, 0, 0.4);
+  }
+}
+
+@keyframes giant-container-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* アイコン：オーラ + ぴょんぴょん */
+.hunger-component-container.giant .hunger-component-icon {
+  animation:
+    giant-icon-aura 1.2s ease-in-out infinite,
+    giant-icon-bounce 0.5s ease-in-out infinite;
+}
+
+@keyframes giant-icon-aura {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(255, 215, 0, 0.9),
+      0 0 18px 4px rgba(255, 105, 180, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(255, 215, 0, 0),
+      0 0 28px 10px rgba(0, 191, 255, 0.7);
+  }
+}
+
+@keyframes giant-icon-bounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-3px) rotate(3deg); }
+}
+
+/* バー：虹色が流れる */
+.hunger-component-container.giant .hunger-component-bar {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.hunger-component-container.giant .hunger-component-bar-inner {
+  background: linear-gradient(
+    90deg,
+    #ff0080, #ff8c00, #ffd700,
+    #00ff7f, #00bfff, #8a2be2,
+    #ff0080, #ff8c00, #ffd700
+  );
+  background-size: 300% 100%;
+  animation: giant-bar-rainbow 1.2s linear infinite;
+}
+
+@keyframes giant-bar-rainbow {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 300% 50%; }
 }

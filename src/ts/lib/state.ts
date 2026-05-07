@@ -10,6 +10,9 @@ import {
   DOKTOR_WIDTH,
   F35_HEIGHT,
   F35_WIDTH,
+  GIANT_DURATION_MS,
+  GIANT_SPEED,
+  GIANT_SPEED_TRANSITION_DURATION_MS,
   GRAVITY,
   GROUND_Y,
   HUNGER_GIANT_MIN,
@@ -127,6 +130,7 @@ export interface GameState {
   meatSpawnTimer: number; // 次の肉スポーンまでの残り時間(ms)
   cloudSpawnTimer: number; // 次の雲スポーンまでの残り時間(ms)
   enemySpawnTimer: number; // 次の敵スポーンまでの残り時間(ms)
+  giantStartSpeed: number; // 巨大化開始時のスクロール速度(ramp-up用)
 }
 
 // ============================================================
@@ -158,11 +162,14 @@ export function createInitialState(): GameState {
     meatSpawnTimer: 3000,
     cloudSpawnTimer: 1500,
     enemySpawnTimer: 2000,
+    giantStartSpeed: 0,
   };
 }
 
 // distance の Zustand 同期を間引くためのモジュール変数
 let distanceSyncAcc = 0;
+// 巨大化残り時間の Zustand 同期を間引くためのモジュール変数
+let giantSyncAcc = 0;
 
 // ============================================================
 // 更新ロジック(毎フレーム呼ばれる)
@@ -173,9 +180,52 @@ export function updateState(state: GameState, dt: number): void {
 
   state.elapsedMs += dt;
 
-  // スクロール処理(距離 = 速度 × 時間 で計算)
-  // 60FPSを基準に、dtに応じた距離を進める
-  state.speed = Math.min(MAX_SPEED, state.speed + SPEED_INCREASE_RATE * (dt / (1000 / 60)));
+  // 巨大化トリガー: 満腹度が100に達し、まだ巨大化中でないとき
+  const currentHunger = useGameStore.getState().hunger;
+  if (currentHunger >= HUNGER_GIANT_MIN && state.player.giantTimer <= 0) {
+    state.player.giantTimer = GIANT_DURATION_MS;
+    state.giantStartSpeed = state.speed;
+    useGameStore.getState().setGiantRemainingMs(GIANT_DURATION_MS);
+    giantSyncAcc = 0;
+  }
+
+  // スクロール速度の更新(巨大化中はGIANT_SPEEDにランプ、通常時は徐々に上昇)
+  if (state.player.giantTimer > 0) {
+    state.player.giantTimer = Math.max(0, state.player.giantTimer - dt);
+    const transition = GIANT_SPEED_TRANSITION_DURATION_MS;
+    const elapsed = GIANT_DURATION_MS - state.player.giantTimer;
+
+    if (elapsed < transition) {
+      // ランプアップ: 開始時の速度 → GIANT_SPEED
+      const t = elapsed / transition;
+      state.speed = state.giantStartSpeed + (GIANT_SPEED - state.giantStartSpeed) * t;
+    } else if (state.player.giantTimer < transition) {
+      // ランプダウン: GIANT_SPEED → INITIAL_SPEED
+      const t = 1 - state.player.giantTimer / transition;
+      state.speed = GIANT_SPEED + (INITIAL_SPEED - GIANT_SPEED) * t;
+    } else {
+      // ピーク
+      state.speed = GIANT_SPEED;
+    }
+
+    // 残り時間を 100ms ごとに Zustand へ同期
+    giantSyncAcc += dt;
+    if (giantSyncAcc >= 100) {
+      giantSyncAcc = 0;
+      useGameStore.getState().setGiantRemainingMs(state.player.giantTimer);
+    }
+
+    // 巨大化終了: 満腹度を0に戻し、速度を初期値に
+    if (state.player.giantTimer === 0) {
+      useGameStore.getState().setHunger(0);
+      useGameStore.getState().setGiantRemainingMs(0);
+      state.speed = INITIAL_SPEED;
+      giantSyncAcc = 0;
+    }
+  } else {
+    // 通常: 60FPSを基準に、dtに応じて少しずつ速度上昇
+    state.speed = Math.min(MAX_SPEED, state.speed + SPEED_INCREASE_RATE * (dt / (1000 / 60)));
+  }
 
   const moveAmount = state.speed * (dt / (1000 / 60));
   state.distance += moveAmount;
@@ -225,7 +275,7 @@ export function updateState(state: GameState, dt: number): void {
       x: CANVAS_WIDTH + 50,
       y: y,
     });
-    state.meatSpawnTimer = 4000 + Math.random() * 4000;
+    state.meatSpawnTimer = 2500 + Math.random() * 2500;
   }
 
   // 敵の移動・衝突判定・スポーン・削除
@@ -251,7 +301,7 @@ export function updateState(state: GameState, dt: number): void {
   state.enemySpawnTimer -= dt;
   if (state.enemySpawnTimer <= 0) {
     spawnEnemy(state);
-    state.enemySpawnTimer = 600 + Math.random() * 400;
+    state.enemySpawnTimer = 700 + Math.random() * 500;
   }
 
   // 倒した敵:スクロールに合わせて流れつつ、上に飛んで重力で落下、回転
@@ -400,7 +450,7 @@ function handleMeatCollision(state: GameState): void {
       img: meatImage,
     };
     if (pixelOverlap(playerBox, meatBox)) {
-      addHunger(7);
+      addHunger(8);
       addScore(10);
     } else {
       remaining.push(meat);

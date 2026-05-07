@@ -11,8 +11,8 @@ export const PLAYER_HEIGHT_MEDIUM = 130;
 export const PLAYER_HEIGHT_GIANT = 195;
 
 // 満腹度→ステージのしきい値(以上で当該ステージ以上)
-export const HUNGER_MEDIUM_MIN = 34;
-export const HUNGER_GIANT_MIN = 67;
+export const HUNGER_MEDIUM_MIN = 60;
+export const HUNGER_GIANT_MIN = 100;
 
 // 物理
 export const GRAVITY = 1;          // 1フレームあたりの落下加速度(px)
@@ -24,6 +24,8 @@ export const MAX_SPEED = 14;         // 最大スクロール速度(px/frame)
 export const SPEED_INCREASE_RATE = 0.0005; // スピード上昇率(px/frame)
 
 export const GIANT_DURATION_MS = 10000; // 巨大化の持続時間
+export const GIANT_SPEED = 35; // 巨大化時のスクロール速度
+export const GIANT_SPEED_TRANSITION_DURATION_MS = 500; // 巨大化時のスクロール速度の変化時間
 
 // オブジェクトサイズ
 export const MEAT_WIDTH = 60;
@@ -35,8 +37,8 @@ export const BEE_WIDTH = 49;
 export const BEE_HEIGHT = 43;
 export const BICYCLE_WIDTH = 95;
 export const BICYCLE_HEIGHT = 59;
-export const DOKTOR_WIDTH = 44;
-export const DOKTOR_HEIGHT = 110;
+export const DOKTOR_WIDTH = 40;
+export const DOKTOR_HEIGHT = 100;
 export const F35_WIDTH = 98;
 export const F35_HEIGHT = 26;
 

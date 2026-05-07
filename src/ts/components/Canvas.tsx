@@ -7,10 +7,9 @@ import {
   GROUND_Y,
   MEAT_HEIGHT,
   MEAT_WIDTH,
-  PLAYER_BASE_HEIGHT,
-  PLAYER_BASE_WIDTH,
 } from "../lib/constants";
-import type { GameState } from "../lib/state";
+import { getDogFrame } from "../lib/dogImages";
+import type { EnemyType, GameState } from "../lib/state";
 
 // ============================================================
 // 画像ロード(モジュールスコープで一度だけ)
@@ -22,10 +21,14 @@ function loadImage(path: string): HTMLImageElement {
 }
 
 const groundImage = loadImage("images/Game/ground.png");
-const dogRun1 = loadImage("images/Game/run1.png");
-const dogRun2 = loadImage("images/Game/run2.png");
 const meatImage = loadImage("images/Game/meat.png");
 const cloudImage = loadImage("images/Game/cloud.png");
+const enemyImages: Record<EnemyType, HTMLImageElement> = {
+  bee: loadImage("images/Game/enemy/bee.png"),
+  bicycle: loadImage("images/Game/enemy/bicycle.png"),
+  doktor: loadImage("images/Game/enemy/doktor.png"),
+  f35: loadImage("images/Game/enemy/f35.png"),
+};
 
 // 横方向のみ繰り返すパターン(初回描画時に作成)
 let groundPattern: CanvasPattern | null = null;
@@ -90,7 +93,9 @@ function render(ctx: CanvasRenderingContext2D, state: GameState): void {
   drawClouds(ctx, state);
   drawGround(ctx, state);
   drawMeats(ctx, state);
+  drawEnemies(ctx, state);
   drawPlayer(ctx, state);
+  drawDefeatedEnemies(ctx, state);
 }
 
 // 地面
@@ -127,23 +132,48 @@ function drawMeats(ctx: CanvasRenderingContext2D, state: GameState): void {
   }
 }
 
-// プレイヤー(犬) - run1.png と run2.png を交互に切り替え
+function drawEnemies(ctx: CanvasRenderingContext2D, state: GameState): void {
+  for (const e of state.enemies) {
+    const img = enemyImages[e.type];
+    if (!img.complete || img.naturalWidth === 0) {
+      ctx.fillStyle = "#a55";
+      ctx.fillRect(e.x, e.y, e.width, e.height);
+      continue;
+    }
+    ctx.drawImage(img, e.x, e.y, e.width, e.height);
+  }
+}
+
+function drawDefeatedEnemies(ctx: CanvasRenderingContext2D, state: GameState): void {
+  for (const d of state.defeatedEnemies) {
+    const img = enemyImages[d.type];
+    ctx.save();
+    ctx.translate(d.x + d.width / 2, d.y + d.height / 2);
+    ctx.rotate(d.rotation);
+    if (!img.complete || img.naturalWidth === 0) {
+      ctx.fillStyle = "#a55";
+      ctx.fillRect(-d.width / 2, -d.height / 2, d.width, d.height);
+    } else {
+      ctx.drawImage(img, -d.width / 2, -d.height / 2, d.width, d.height);
+    }
+    ctx.restore();
+  }
+}
+
+// プレイヤー(犬) - サイズステージごとの run1/run2 画像を交互に切り替え
 function drawPlayer(ctx: CanvasRenderingContext2D, state: GameState): void {
   const { player } = state;
-  const w = PLAYER_BASE_WIDTH * player.scale;
-  const h = PLAYER_BASE_HEIGHT * player.scale;
-  const drawX = player.x - w / 2;
-  const drawY = player.y - h;
+  const drawX = player.x - player.width / 2;
+  const drawY = player.y - player.height;
 
-  // runFrame は 0〜1 の周期値。前半をrun1、後半をrun2にする
-  const currentFrame = state.runFrame < 0.5 ? dogRun1 : dogRun2;
+  const currentFrame = getDogFrame(player.sizeStage, state.runFrame);
 
   // 画像がまだロードできていない場合はフォールバック(矩形)
   if (!currentFrame.complete || currentFrame.naturalWidth === 0) {
     ctx.fillStyle = "#c9853f";
-    ctx.fillRect(drawX, drawY, w, h);
+    ctx.fillRect(drawX, drawY, player.width, player.height);
     return;
   }
 
-  ctx.drawImage(currentFrame, drawX, drawY, w, h);
+  ctx.drawImage(currentFrame, drawX, drawY, player.width, player.height);
 }

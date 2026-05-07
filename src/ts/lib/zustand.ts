@@ -16,7 +16,7 @@ interface GameStore {
 }
 
 export const useGameStore = create<GameStore>((set) => ({
-  hunger: 50,
+  hunger: 0,
   baseScore: 0,
   distance: 0,
   isGameOver: false,

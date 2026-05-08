@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/top.css";
+import Rule from "../components/Rule";
 
 export default function Top() {
   const [isRuleOpen, setIsRuleOpen] = useState(false);
@@ -39,15 +40,7 @@ export default function Top() {
         <p className="top-record-button-text">記録</p>
       </Link>
 
-      {isRuleOpen && <div className="rule-modal">
-        <div className="rule-modal-content">
-          <h2>Rule</h2>
-          <p>1. ゲームは100ポイントを目標にしています。</p>
-          <p>2. ゲームは10秒間です。</p>
-          <p>3. ゲームは100ポイントを目標にしています。</p>
-        </div>
-        <div onClick={() => setIsRuleOpen(false)}>Close</div>
-      </div>}
+      {isRuleOpen && <Rule setIsRuleOpen={setIsRuleOpen} />}
     </div>
   );
 }

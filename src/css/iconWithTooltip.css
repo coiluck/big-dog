@@ -1,0 +1,36 @@
+.icon-with-tooltip {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-with-tooltip-image {
+  object-position: center;
+  display: block;
+  cursor: pointer;
+}
+
+.icon-with-tooltip-description {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.icon-with-tooltip-description::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.85);
+}

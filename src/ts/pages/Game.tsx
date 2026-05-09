@@ -3,6 +3,8 @@ import Canvas from "../components/Canvas";
 import { createInitialState, jumpPlayer, updateState } from "../lib/state.ts";
 import Score from "../components/Score";
 import Hunger from "../components/Hunger";
+import GameOver from "../components/gameOver";
+import { useGameStore } from "../lib/zustand";
 import "../../css/game.css";
 
 export default function Game() {
@@ -25,11 +27,17 @@ export default function Game() {
     updateState(stateRef.current, dt);
   }, []);
 
+  const handleRestart = useCallback(() => {
+    stateRef.current = createInitialState();
+    useGameStore.getState().reset();
+  }, []);
+
   return (
     <div className="game-container">
       <Canvas stateRef={stateRef} onTick={onTick} />
       <Score />
       <Hunger />
+      <GameOver onRestart={handleRestart} />
     </div>
   );
 }

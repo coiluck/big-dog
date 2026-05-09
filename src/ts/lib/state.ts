@@ -36,6 +36,7 @@ import { getDogDisplaySize, getDogFrame } from "./dogImages";
 import { pixelOverlap } from "./pixelMask";
 import { enemyImages, meatImage } from "./images";
 import { useGameStore } from "./zustand";
+import { maybeSaveRecord } from "./records";
 
 // ============================================================
 // 型定義
@@ -419,7 +420,13 @@ function handleEnemyCollision(state: GameState): void {
       addScore(50);
     } else {
       state.isGameOver = true;
+      // 表示値と保存値を揃えるため、最終 distance を Zustand に反映
+      useGameStore.getState().setDistance(Math.floor(state.distance));
       gameOver();
+      maybeSaveRecord({
+        distance: Math.floor(state.distance / 10),
+        score: useGameStore.getState().baseScore,
+      });
       console.log("Game Over!");
       remaining.push(e);
     }

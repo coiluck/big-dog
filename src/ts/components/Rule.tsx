@@ -37,9 +37,9 @@ export default function Rule({ setIsRuleOpen }: { setIsRuleOpen: (isOpen: boolea
             と
             <IconWithTooltip imagePath="/big-dog/images/Game/enemy/bicycle.png" size={36} description="自転車" />
             に打ち勝つことができます。
-            <IconWithTooltip imagePath="/big-dog/images/Game/enemy/f35.png" size={36} description="F35" />
+            <IconWithTooltip imagePath="/big-dog/images/Game/enemy/f35.png" size={48} description="F35" />
             と
-            <IconWithTooltip imagePath="/big-dog/images/Game/enemy/doktor.png" size={36} description="動物病院の先生" />
+            <IconWithTooltip imagePath="/big-dog/images/Game/enemy/doktor.png" size={24} description="動物病院の先生" />
             には勝てません
             <br /><br />
             <IconWithTooltip imagePath="/big-dog/images/Game/dog/gi_run2.png" size={48} description="いちばん大きい犬" />
@@ -48,7 +48,9 @@ export default function Rule({ setIsRuleOpen }: { setIsRuleOpen: (isOpen: boolea
           </div>
           <div className="rule-modal-content-body-item">
             <p className="rule-modal-content-body-item-title">スコア</p>
-            <p className="rule-modal-content-body-item-description">（肉）の取得 / 敵を倒すことによってスコアを獲得できます</p>
+            <p className="rule-modal-content-body-item-description">
+              <IconWithTooltip imagePath="/big-dog/images/Game/meat.png" size={36} description="肉" />の取得 / 敵を倒すことによってスコアを獲得できます
+            </p>
           </div>
         </div>
       </div>

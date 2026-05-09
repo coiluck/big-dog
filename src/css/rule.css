@@ -25,6 +25,7 @@
   color: #ffeae3;
   background-color: rgba(0, 0, 0, .7);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: 2px solid #D4AF37;
   border-radius: 1rem;
   z-index: 3;
   animation: fadeIn 0.3s ease-in-out;
@@ -93,10 +94,12 @@
   gap: 0.5rem;
 }
 .rule-modal-content-body-item-title {
-  border-left: 2px solid #ffeae3;
+  border-left: 2px solid #a83232;
   padding: .25rem 0;
   padding-left: 0.5rem;
+  color: #d64f4f;;
   font-size: 1rem;
+  font-weight: bold;
   text-align: left;
 }
 .rule-modal-content-body-item-description {

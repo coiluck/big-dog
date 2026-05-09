@@ -20,7 +20,7 @@ export default function Rule({ setIsRuleOpen }: { setIsRuleOpen: (isOpen: boolea
               を食べると画面右上のパラメータが上昇し、一定の水準に達した場合、サイズが大きくなります。
               <IconWithTooltip imagePath="/big-dog/images/Game/dog/gi_run2.png" size={36} description="いちばん大きい犬" />
               の状態は10秒間のみ持続し、終了後は
-              <IconWithTooltip imagePath="/big-dog/images/Game/dog/sm_run2.png" size={36} description="1番小さい犬" />
+              <IconWithTooltip imagePath="/big-dog/images/Game/dog/sm_run2.png" size={36} description="いちばん小さい犬" />
               に戻ります
             </p>
           </div>
@@ -29,7 +29,7 @@ export default function Rule({ setIsRuleOpen }: { setIsRuleOpen: (isOpen: boolea
             <p className="rule-modal-content-body-item-description">
             プレイヤーのサイズによって敵との関係が変化します。
             <br /><br />
-            <IconWithTooltip imagePath="/big-dog/images/Game/dog/sm_run2.png" size={48} description="1番小さい犬" />
+            <IconWithTooltip imagePath="/big-dog/images/Game/dog/sm_run2.png" size={48} description="いちばん小さい犬" />
             : 全ての敵に負けてしまいます。敵を避けながら進もう！
             <br /><br />
             <IconWithTooltip imagePath="/big-dog/images/Game/dog/md_run2.png" size={48} description="中くらいの犬" />

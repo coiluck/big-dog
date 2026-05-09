@@ -1,0 +1,147 @@
+.record-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  z-index: 1;
+}
+
+.record-content-header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.record-content-header-top-container {
+  width: 3rem;
+  height: 3rem;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.record-content-header-top-container:hover {
+  transform: scale(1.05);
+}
+.record-content-header-top-container:active {
+  transform: scale(0.95);
+}
+.record-content-header-top-button {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  clip-path: polygon(58.75% 20.00%, 62.03% 20.31%, 64.06% 22.03%, 64.84% 23.75%, 64.38% 27.34%, 42.19% 50.00%, 64.38% 72.50%, 64.53% 77.03%, 63.44% 78.59%, 61.09% 79.84%, 58.75% 79.84%, 56.41% 78.59%, 31.41% 53.59%, 30.00% 51.09%, 30.00% 48.75%, 31.41% 46.25%, 56.56% 21.09%, 58.75% 20.00%);
+}
+
+.record-content-header span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.record-content-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80vw;
+  height: 90dvh;
+  min-height: 0;
+  margin-bottom: 3rem;
+}
+
+.record-content-body-tabs-change {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.record-content-body-tabs-change-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.record-content-body-tabs-change-item:hover {
+  background-color: rgba(0, 0, 0, .3);
+  border: 2px solid rgba(207, 218, 64, 0.3);
+  border-bottom: none;
+}
+.record-content-body-tabs-change-item.active {
+  color: #ffeae3;
+  background-color: rgba(0, 0, 0, .7);
+  border: 2px solid #D4AF37;
+  border-bottom: none;
+}
+
+.record-content-body-tabs-content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 2rem);
+  height: 100%;
+  padding: 1rem;
+  margin: -1rem auto 0;
+  background-color: rgba(0, 0, 0, .7);
+  border: 2px solid #D4AF37;
+  border-radius: 0 0.5rem 0.5rem 0.5rem;
+}
+
+/* 左右のカラム */
+.record-rank-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+/* 区切り線 */
+.record-rank-divider {
+  width: 1px;
+  background-color: rgba(212, 175, 55, 0.4);
+  margin: 0.5rem 0.5rem;
+}
+
+/* 各ランク行 */
+.record-rank-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.record-rank-item-rank {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #D4AF37;
+  min-width: 1.5rem;
+  text-align: right;
+}
+
+.record-rank-item-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ffeae3;
+  letter-spacing: 0.05em;
+}

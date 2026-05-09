@@ -23,7 +23,7 @@ export default function Record() {
     const records = loadRecords();
 
     const pad = (arr: RunRecord[]): (RunRecord | null)[] => {
-      const padded = [...arr];
+      const padded: (RunRecord | null)[] = [...arr];
       while (padded.length < RANK_COUNT) padded.push(null);
       return padded;
     };

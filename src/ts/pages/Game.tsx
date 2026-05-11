@@ -27,13 +27,26 @@ export default function Game() {
     updateState(stateRef.current, dt);
   }, []);
 
+  // タップでジャンプ
+  const handleJumpInput = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest(".game-over-modal")) return;
+
+    e.preventDefault();
+    jumpPlayer(stateRef.current);
+  }, []);
+
   const handleRestart = useCallback(() => {
     stateRef.current = createInitialState();
     useGameStore.getState().reset();
   }, []);
 
   return (
-    <div className="game-container">
+    <div
+      className="game-container"
+      onPointerDown={handleJumpInput}
+      style={{ touchAction: "manipulation" }}
+    >
       <Canvas stateRef={stateRef} onTick={onTick} />
       <Score />
       <Hunger />

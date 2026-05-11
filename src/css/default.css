@@ -43,7 +43,7 @@ html {
   }
 }
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--color-bg);
   line-height: 1.6;
   text-rendering: optimizeLegibility;
